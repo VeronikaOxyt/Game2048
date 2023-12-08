@@ -1,6 +1,4 @@
-package Key;
-
-import java.awt.*;
+package key;
 
 public class Key {
     private int i;

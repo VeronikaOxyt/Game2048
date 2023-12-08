@@ -1,20 +1,28 @@
 package board;
 
-import java.util.List;
-import java.security.Key;
-import java.util.HashMap;
-import java.util.Map;
+import key.Key;
+import java.util.*;
 
 
  public abstract class Board {
     private int width;
     private int height;
-    private Map<Key, Integer> board = new HashMap<>();
+    Map<Key, Integer> board = new HashMap<>();
 
     public Board(int width, int height) {
         this.width = width;
         this.height = height;
     }
+
+    public int getWidth() {
+       return width;
+    }
+    public int getHeight() {
+       return height;
+    }
+
+
+
     public abstract void fillBoard(List<Integer> list);
 
     public abstract List<Key> availableSpace();
@@ -28,8 +36,9 @@ import java.util.Map;
 
     public abstract List<Key> getRow(int i);
 
-     public abstract boolean hasValue(Integer value);
+    public abstract boolean hasValue(Integer value);
 
-     public abstract boolean getValues(List<Key> keys);
+    public abstract List<Integer> getValues(List<Key> keys);
 
-}
+    public abstract void clear();
+ }
