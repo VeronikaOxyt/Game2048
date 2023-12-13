@@ -1,26 +1,22 @@
-package board;
+package ru.sbrf.game2048.board;
 
-import key.Key;
+import ru.sbrf.game2048.key.Key;
 import java.util.*;
 
-public class SquareBoard extends Board {
-    private int size;
+public class SquareBoard<V> extends Board<Key, V> {
+    private final int gameSize;
 
-    public SquareBoard(int size) {
-        super(size, size);
-        this.size = size;
-    }
-
-    public int getSize() {
-        return size;
+    public SquareBoard(int gameSize) {
+        super(gameSize, gameSize);
+        this.gameSize = gameSize;
     }
 
     @Override
-    public void fillBoard(List<Integer> list) {
+    public void fillBoard(List<V> list) {
         clear();
-        Iterator<Integer> iterator = list.iterator();
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        Iterator<V> iterator = list.iterator();
+        for (int i = 0; i < gameSize; i++) {
+            for (int j = 0; j < gameSize; j++) {
                 if (iterator.hasNext()) {
                     addItem(new Key(i, j), iterator.next());
                 } else {
@@ -32,7 +28,7 @@ public class SquareBoard extends Board {
     @Override
     public List<Key> availableSpace() {
         var availableKeyList = new ArrayList<Key>();
-        for (Key key : board.keySet()) {
+        for (var key : board.keySet()) {
             if (getValue(key) == null) {
                 availableKeyList.add(key);
             }
@@ -40,12 +36,12 @@ public class SquareBoard extends Board {
         return availableKeyList;
     }
     @Override
-    public void addItem(Key key, Integer value) {
+    public void addItem(Key key, V value) {
         board.put(key, value);
     }
     @Override
     public Key getKey(int i, int j) {
-        for (Key key : board.keySet()) {
+        for (var key : board.keySet()) {
             if (key.getI() == i && key.getJ() == j) {
                 return key;
             }
@@ -53,37 +49,34 @@ public class SquareBoard extends Board {
         return null;
     }
     @Override
-    public Integer getValue(Key key) {
+    public V getValue(Key key) {
+
         return board.get(key);
     }
     @Override
     public List<Key> getColumn(int j){
         var keyColumnList = new ArrayList<Key>();
-        for (Key key : board.keySet()) {
-            if (key.getJ() == j) {
-                keyColumnList.add(key);
-            }
+        for (var i = 0; i < gameSize; i++) {
+                keyColumnList.add(getKey(i, j));
         }
         return keyColumnList;
     }
     @Override
     public List<Key> getRow(int i) {
         var keyRowList = new ArrayList<Key>();
-        for (Key key : board.keySet()) {
-            if (key.getI() == i) {
-                keyRowList.add(key);
-            }
+        for (int j = 0; j < gameSize; j++) {
+            keyRowList.add(getKey(i, j));
         }
         return keyRowList;
     }
     @Override
-    public boolean hasValue(Integer value) {
+    public boolean hasValue(V value) {
         return board.containsValue(value);
     }
     @Override
-    public List<Integer> getValues(List<Key> keys){
-        var listValues = new ArrayList<Integer>();
-        for (Key key : keys) {
+    public List<V> getValues(List<Key> keys){
+        var listValues = new ArrayList<V>();
+        for (var key : keys) {
             listValues.add(getValue(key));
         }
         return listValues;

@@ -1,4 +1,4 @@
-package key;
+package ru.sbrf.game2048.key;
 
 public class Key {
     private int i;

@@ -1,7 +1,7 @@
-package testclass;
+package ru.sbrf.game2048.testclass;
 
-import board.Board;
-import board.SquareBoard;
+import ru.sbrf.game2048.board.Board;
+import ru.sbrf.game2048.board.SquareBoard;
 import java.util.*;
 import static java.util.Arrays.asList;
 public class BoardTest {

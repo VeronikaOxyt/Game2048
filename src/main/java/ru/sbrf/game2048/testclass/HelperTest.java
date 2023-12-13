@@ -1,8 +1,8 @@
-package testclass;
+package ru.sbrf.game2048.testclass;
 
-import game.GameHelper;
+import ru.sbrf.game2048.game.GameHelper;
 import static java.util.Arrays.asList;
-import static testclass.BoardTest.assertEquals;
+import static ru.sbrf.game2048.testclass.BoardTest.assertEquals;
 public class HelperTest {
     private final static GameHelper helper = new GameHelper();
 
