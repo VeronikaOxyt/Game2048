@@ -61,7 +61,6 @@ public class Game2048 implements Game {
                     }
                     break;
                 case RIGHT :
-                    System.out.println("61 line");
                     for (int i = 0; i < GAME_SIZE; i++) {
                         var rowKeysRight = board.getRow(i);
                         Collections.reverse(rowKeysRight);
