@@ -35,10 +35,12 @@ public class SquareBoard<V> extends Board<Key, V> {
         }
         return availableKeyList;
     }
+
     @Override
     public void addItem(Key key, V value) {
         board.put(key, value);
     }
+
     @Override
     public Key getKey(int i, int j) {
         for (var key : board.keySet()) {
@@ -61,6 +63,7 @@ public class SquareBoard<V> extends Board<Key, V> {
         }
         return keyColumnList;
     }
+
     @Override
     public List<Key> getRow(int i) {
         var keyRowList = new ArrayList<Key>();
@@ -69,10 +72,12 @@ public class SquareBoard<V> extends Board<Key, V> {
         }
         return keyRowList;
     }
+
     @Override
     public boolean hasValue(V value) {
         return board.containsValue(value);
     }
+
     @Override
     public List<V> getValues(List<Key> keys){
         var listValues = new ArrayList<V>();

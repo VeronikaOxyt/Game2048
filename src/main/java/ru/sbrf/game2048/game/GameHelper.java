@@ -12,7 +12,6 @@ public class GameHelper {
         if (list.isEmpty()) {
             return list;
         }
-
         for (Integer value : list) {
             if (value != null) {
                 listWithoutNull.add(value);

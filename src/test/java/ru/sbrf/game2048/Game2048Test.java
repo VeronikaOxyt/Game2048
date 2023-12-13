@@ -26,7 +26,6 @@ public class Game2048Test {
                 return null;
             }
             @Override public void addItem(String key, Double value) {
-
             }
             @Override public String getKey(int i, int j) {
                 return null;

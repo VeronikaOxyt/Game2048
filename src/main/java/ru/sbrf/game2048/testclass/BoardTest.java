@@ -40,8 +40,8 @@ public class BoardTest {
     }
 
     public static void assertEquals(List<?> list1, List<?> list2) {
-        if (!(list1.size() == list2.size() && list1.containsAll(list2)
-                && list2.containsAll(list1)))
+        if (!(list1.size() == list2.size() &&
+                list1.containsAll(list2) && list2.containsAll(list1)))
             throw new RuntimeException("List1: " + list1 + " not equals List2: " + list2);
     }
 }

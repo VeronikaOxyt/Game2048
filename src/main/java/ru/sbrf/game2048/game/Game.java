@@ -14,5 +14,4 @@ public interface Game {
     public Board getGameBoard();
 
     public boolean hasWin();
-
 }

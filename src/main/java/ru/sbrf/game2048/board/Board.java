@@ -20,8 +20,6 @@ import java.util.*;
        return height;
     }
 
-
-
     public abstract void fillBoard(List<V> list);
 
     public abstract List<K> availableSpace();

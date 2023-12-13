@@ -23,6 +23,7 @@ public class Game2048 implements Game {
         addItem();
         addItem();
     }
+
     @Override
     public boolean canMove() {
         if (board.availableSpace().isEmpty()) {
@@ -39,6 +40,7 @@ public class Game2048 implements Game {
         }
         return !board.availableSpace().isEmpty();
     }
+
     @Override
     public boolean move(Direction direction) {
         boolean moveIsDone = false;
