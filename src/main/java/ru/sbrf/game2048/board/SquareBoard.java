@@ -14,6 +14,10 @@ public class SquareBoard<V> extends Board<Key, V> {
     @Override
     public void fillBoard(List<V> list) {
         clear();
+        if (list.size() > gameSize*gameSize) {
+            throw new RuntimeException("Application initialization error, the length of " +
+                    "the transmitted list goes beyond the board");
+        }
         Iterator<V> iterator = list.iterator();
         for (int i = 0; i < gameSize; i++) {
             for (int j = 0; j < gameSize; j++) {
@@ -67,7 +71,7 @@ public class SquareBoard<V> extends Board<Key, V> {
     @Override
     public List<Key> getRow(int i) {
         var keyRowList = new ArrayList<Key>();
-        for (int j = 0; j < gameSize; j++) {
+        for (var j = 0; j < gameSize; j++) {
             keyRowList.add(getKey(i, j));
         }
         return keyRowList;

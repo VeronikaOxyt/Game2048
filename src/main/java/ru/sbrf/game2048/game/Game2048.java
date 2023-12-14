@@ -2,6 +2,7 @@ package ru.sbrf.game2048.game;
 import ru.sbrf.game2048.board.Board;
 import ru.sbrf.game2048.board.SquareBoard;
 import ru.sbrf.game2048.direction.Direction;
+import ru.sbrf.game2048.exception.NotEnoughSpace;
 import ru.sbrf.game2048.key.Key;
 
 import java.util.*;
@@ -9,8 +10,8 @@ import java.util.*;
 public class Game2048 implements Game {
     public static final int GAME_SIZE = 4;
     private final Board<Key, Integer> board = new SquareBoard<>(GAME_SIZE);
-    private GameHelper helper = new GameHelper();
-    private Random random = new Random();
+    private final GameHelper helper = new GameHelper();
+    private final Random random = new Random();
 
     @Override
     public void init() {
@@ -20,8 +21,12 @@ public class Game2048 implements Game {
             listOfNull.add(null);
         }
         board.fillBoard(listOfNull);
-        addItem();
-        addItem();
+        try {
+            addItem();
+            addItem();
+        } catch (NotEnoughSpace e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
@@ -49,74 +54,53 @@ public class Game2048 implements Game {
                 case LEFT :
                     for (int i = 0; i < GAME_SIZE; i++) {
                         var rowKeysLeft = board.getRow(i);
-                        var rowValuesLeft = helper.moveAndMergeEqual(board
-                                .getValues(rowKeysLeft)).iterator();
-                        int counter = 0;
-                        for (var key : rowKeysLeft) {
-                            moveIsDone = moveIsDone || !Objects.equals(board
-                                    .getValues(rowKeysLeft), rowValuesLeft);
-                            counter++;
-                            board.addItem(key, rowValuesLeft.next());
-                        }
+                        moveIsDone = makeAMove(rowKeysLeft, moveIsDone);
                     }
                     break;
                 case RIGHT :
                     for (int i = 0; i < GAME_SIZE; i++) {
                         var rowKeysRight = board.getRow(i);
                         Collections.reverse(rowKeysRight);
-                        var rowValuesRight = helper.moveAndMergeEqual(board
-                                .getValues(rowKeysRight)).iterator();
-                        for (var key : rowKeysRight) {
-                            moveIsDone = moveIsDone || !Objects.equals(board
-                                    .getValues(rowKeysRight), rowValuesRight);
-                            board.addItem(key, rowValuesRight.next());
-                        }
+                        moveIsDone = makeAMove(rowKeysRight, moveIsDone);
                     }
                     break;
                 case UP :
-                    for (int j = 0; j < GAME_SIZE; j++) {
+                    for (var j = 0; j < GAME_SIZE; j++) {
                         var columnKeysUp = board.getColumn(j);
-                        var columnValuesUp = helper.moveAndMergeEqual(board
-                                .getValues(columnKeysUp)).iterator();
-                        for (var key : columnKeysUp) {
-                            moveIsDone = moveIsDone || !Objects.equals(board
-                                    .getValues(columnKeysUp), columnValuesUp);
-                            board.addItem(key, columnValuesUp.next());
-                        }
+                        moveIsDone = makeAMove(columnKeysUp, moveIsDone);
                     }
                     break;
                 case DOWN :
-                    for (int j = board.getHeight() -  1; j >=0 ; j--) {
+                    for (var j = board.getHeight() -  1; j >=0 ; j--) {
                         var columnKeysDown = board.getColumn(j);
                         Collections.reverse(columnKeysDown);
-                        var columnValuesDown = helper.moveAndMergeEqual(board
-                                .getValues(columnKeysDown)).iterator();
-                        for (var key : columnKeysDown) {
-                            moveIsDone = moveIsDone || !Objects.equals(board
-                                    .getValues(columnKeysDown), columnKeysDown);
-                            board.addItem(key, columnValuesDown.next());
-                        }
+                        moveIsDone = makeAMove(columnKeysDown, moveIsDone);
                     }
                     break;
             }
-            if(moveIsDone) {
-                addItem();
+            try {
+                if(moveIsDone) {
+                    addItem();
+                }
+            } catch (NotEnoughSpace e) {
+                System.out.println(e.getMessage());
             }
         }
         return canMove();
     }
     @Override
-    public void addItem() {
-         List<Key> freeCells = board.availableSpace();
-        if (!freeCells.isEmpty()) {
-            int probability = random.nextInt(9);
-            int randomCell = random.nextInt(freeCells.size() - 1);
-            if (probability < 8) {
-                board.addItem(freeCells.get(randomCell), 2);
-            }
-            else {
-                board.addItem(freeCells.get(randomCell), 4);
-            }
+    public void addItem() throws NotEnoughSpace {
+        List<Key> freeCells = board.availableSpace();
+        if (freeCells.isEmpty()) {
+            throw new NotEnoughSpace("No available space");
+        }
+        int probability = random.nextInt(9);
+        int randomCell = random.nextInt(freeCells.size());
+        if (probability < 8) {
+            board.addItem(freeCells.get(randomCell), 2);
+        }
+        else {
+            board.addItem(freeCells.get(randomCell), 4);
         }
     }
 
@@ -127,5 +111,16 @@ public class Game2048 implements Game {
     @Override
     public boolean hasWin() {
         return board.hasValue(2048);
+    }
+
+    private boolean makeAMove(List<Key> rowOrColumnKeys, boolean moveIsDone) {
+        var rowOrColumnValues = helper.moveAndMergeEqual(board
+                .getValues(rowOrColumnKeys)).iterator();
+        for (var key : rowOrColumnKeys) {
+            moveIsDone = moveIsDone || !Objects.equals(board
+                    .getValues(rowOrColumnKeys), rowOrColumnValues);
+            board.addItem(key, rowOrColumnValues.next());
+        }
+        return moveIsDone;
     }
 }
